@@ -119,7 +119,7 @@ function connectionLabel() {
   $('setup-hint').hidden = !!apiUrl;
 }
 function openConnection() { $('api-url').value = apiUrl; setError('connection-error', ''); $('connection-dialog').showModal(); }
-for (const id of ['connect-open', 'settings-open']) $(id).addEventListener('click', openConnection);
+for (const id of ['connect-open', 'settings-open', 'mobile-settings']) $(id).addEventListener('click', openConnection);
 $('connection-close').addEventListener('click', () => $('connection-dialog').close());
 $('connection-form').addEventListener('submit', event => {
   event.preventDefault();
@@ -135,7 +135,7 @@ $('login-form').addEventListener('submit', async event => {
   } catch (error) { setError('login-error', error.message); }
   finally { $('login-submit').disabled = false; }
 });
-$('logout').addEventListener('click', async () => { try { await request('/api/logout', { method: 'POST' }); } catch {} signedOut(); });
+for (const id of ['logout', 'mobile-logout']) $(id).addEventListener('click', async () => { try { await request('/api/logout', { method: 'POST' }); } catch {} signedOut(); });
 for (const button of document.querySelectorAll('[data-period]')) button.addEventListener('click', () => { period = button.dataset.period; page = 1; for (const choice of document.querySelectorAll('[data-period]')) choice.classList.toggle('selected', choice === button); text('range-caption', period === 'all' ? 'All recorded activity' : period === 'today' ? 'Today' : 'Last ' + period + ' days'); void refresh(); });
 for (const button of document.querySelectorAll('[data-section]')) button.addEventListener('click', () => showSection(button.dataset.section));
 $('view-sources').addEventListener('click', () => showSection('devices'));
