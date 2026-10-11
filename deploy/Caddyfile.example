@@ -1,0 +1,6 @@
+# Replace this name with the server's real DNS name, with valid DNS records.
+prints.example.com {
+    @api path /api/*
+    reverse_proxy @api 127.0.0.1:8765
+    respond "Not found" 404
+}

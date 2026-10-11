@@ -1,0 +1,14 @@
+{
+  "username": "admin",
+  "printerHost": "192.0.2.10",
+  "printerName": "HP LaserJet Pro M501dn",
+  "printerPort": 9100,
+  "apiHost": "127.0.0.1",
+  "apiPort": 8765,
+  "gatewayEnabled": true,
+  "gatewayHost": "0.0.0.0",
+  "gatewayPort": 19100,
+  "gatewayPublicAddress": "192.0.2.20",
+  "allowedSourceIPs": ["192.0.2.30"],
+  "allowedOrigins": ["https://nimajraz.github.io"]
+}

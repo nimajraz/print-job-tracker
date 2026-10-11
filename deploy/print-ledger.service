@@ -1,0 +1,24 @@
+[Unit]
+Description=Print Ledger gateway and private API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=printledger
+Group=printledger
+WorkingDirectory=/opt/print-ledger
+Environment=PRINT_LEDGER_CONFIG=/etc/print-ledger/config.json
+Environment=PRINT_LEDGER_DATA=/var/lib/print-ledger
+ExecStart=/usr/bin/node /opt/print-ledger/backend/server.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/print-ledger
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

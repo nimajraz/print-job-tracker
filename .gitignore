@@ -1,0 +1,10 @@
+node_modules/
+.env*
+!.env.example
+config.json
+*.sqlite*
+*.prn
+data/
+private/
+preview-*.png
+*.log

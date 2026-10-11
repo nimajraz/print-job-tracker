@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A private dashboard for print jobs, source IPs, and gateway delivery history.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <title>Print Ledger · Print activity</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main id="signin" class="signin">
+    <section class="intro" aria-label="About Print Ledger">
+      <a class="brand" href="./"><img src="favicon.svg" alt="" width="36" height="36">Print Ledger<span class="brand-tag">ADMIN</span></a>
+      <div class="intro-copy"><p class="eyebrow">YOUR PRINTER, IN FOCUS</p><h1>Every job.<br>Every source.<br><span>One clear view.</span></h1><p class="intro-text">Follow print activity by IP address, see delivery status, and keep a private history of jobs sent through your gateway.</p>
+        <div class="paper-art" aria-hidden="true"><div class="paper-sheet"><div class="paper-line long"></div><div class="paper-line"></div><div class="paper-line short"></div><div class="paper-chart"><i></i><i></i><i></i><i></i><i></i></div></div><div class="paper-badge"><span class="status-dot"></span> A clearer print history</div></div>
+      </div>
+      <p class="intro-foot">BUILT FOR VISIBILITY. KEPT PRIVATE.</p>
+    </section>
+    <section class="login-panel"><div class="login-box">
+      <div class="lock-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg></div>
+      <p class="eyebrow">ADMIN ACCESS</p><h2>Welcome back</h2><p class="muted">Sign in to view your printer’s activity.</p>
+      <div class="connection-chip"><span class="status-dot" id="login-dot"></span><span id="connection-label">Gateway not connected</span><button class="text-button" type="button" id="connect-open">Configure</button></div>
+      <form id="login-form">
+        <label for="username">Username</label><input id="username" name="username" autocomplete="username" required placeholder="Enter username">
+        <label for="password">Password</label><div class="password-field"><input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter password"><button type="button" id="show-password" aria-label="Show password">Show</button></div>
+        <p id="login-error" class="error" role="alert" hidden></p><button class="primary login-submit" id="login-submit" type="submit">Sign in <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="login-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9S4 17 4 12V6Z"/><path d="m8 12 3 3 5-6"/></svg><p>Job history stays on your gateway. Access is verified by the server.</p></div>
+      <p class="setup-hint" id="setup-hint">An always-on gateway is needed before live tracking can begin.</p>
+    </div><p class="login-footer">PRINT LEDGER <span>·</span> PRIVATE PRINT ACTIVITY</p></section>
+  </main>
+  <div id="dashboard" class="dashboard" hidden>
+    <aside class="sidebar"><a class="brand" href="./"><img src="favicon.svg" width="32" height="32" alt="">Print Ledger</a><span class="workspace-label">PRINTER WORKSPACE</span>
+      <nav aria-label="Dashboard"><button class="nav-item active" data-section="overview"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</button><button class="nav-item" data-section="jobs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6Z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg>Print jobs</button><button class="nav-item" data-section="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 21h8M12 16v5"/></svg>Source IPs</button></nav>
+      <div class="sidebar-bottom"><div class="printer-card"><div class="small-label">TRACKED PRINTER</div><strong id="printer-name">Network printer</strong><code id="printer-ip">—</code><span id="gateway-status" class="gateway-status">Gateway not deployed</span></div><button class="nav-item" id="settings-open"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="3"/><circle cx="16" cy="17" r="3"/></svg>Connection</button><div class="account"><span class="avatar">A</span><div><strong id="account-name">admin</strong><span>Administrator</span></div><button id="logout" aria-label="Sign out" title="Sign out">↗</button></div></div>
+    </aside>
+    <main class="workspace"><header class="topbar"><span>Workspace <span class="slash">/</span> <strong id="breadcrumb">Overview</strong></span><span class="update-info"><span class="status-dot"></span><span id="last-updated">Waiting for gateway</span></span></header>
+      <div class="content"><div class="page-heading"><div><p class="eyebrow">PRINT ACTIVITY</p><h1 id="page-title">A clear view of your printer.</h1><p class="muted" id="page-subtitle">Jobs received by your gateway, grouped by source IP.</p></div><button class="secondary" id="export">↓ <span>Export CSV</span></button></div>
+        <div class="notice" id="coverage-note"><span class="notice-icon">i</span><p>Only jobs sent through the gateway are recorded. Configure every device to use it for complete coverage.</p></div>
+        <div class="toolbar"><div class="segmented" role="group" aria-label="Date range"><button data-period="today">Today</button><button data-period="7" class="selected">7 days</button><button data-period="30">30 days</button><button data-period="all">All time</button></div><span id="range-caption" class="muted">Last 7 days</span><button id="refresh" class="text-button">↻ Refresh</button></div>
+        <p id="dashboard-error" class="error global-error" role="alert" hidden></p>
+        <section class="stats" aria-label="Activity summary"><article class="stat"><span>Total jobs</span><strong id="stat-total">0</strong><small>Received by gateway</small></article><article class="stat"><span>Forwarded</span><strong id="stat-forwarded">0</strong><small>Sent to the printer</small></article><article class="stat"><span>Source IPs</span><strong id="stat-devices">0</strong><small>Unique sending addresses</small></article><article class="stat"><span>Needs attention</span><strong id="stat-failed">0</strong><small id="pending-caption">0 jobs in progress</small></article></section>
+        <section id="overview-section" class="section-view"><div class="insight-grid"><article class="panel activity-panel"><div class="panel-heading"><div><h2>Activity over time</h2><p>Jobs received per day · UTC</p></div><span class="chart-key"><i></i> Print jobs</span></div><div id="activity-chart" class="activity-chart" role="img" aria-label="No jobs recorded yet"></div><div class="chart-foot"><span id="chart-start">—</span><span id="chart-end">—</span></div></article><article class="panel sources-panel"><div class="panel-heading"><div><h2>Top source IPs</h2><p>Who’s sending the most jobs</p></div></div><div id="top-sources" class="top-sources"></div><button class="text-button source-link" id="view-sources">View all source IPs <span>→</span></button></article></div></section>
+        <section id="devices-section" class="section-view" hidden><article class="panel"><div class="panel-heading"><div><h2>Activity by source IP</h2><p>Actual connection addresses observed by the gateway</p></div></div><div class="table-scroll"><table><thead><tr><th>Source IP</th><th>Jobs</th><th>Forwarded</th><th>Data received</th><th>Last seen</th></tr></thead><tbody id="devices-body"></tbody></table></div><div id="devices-empty" class="empty-state" hidden><strong>No source IPs yet</strong><p>Devices appear here when they send a job through the gateway.</p></div></article></section>
+        <section id="jobs-section" class="panel jobs-panel"><div class="panel-heading"><div><h2 id="jobs-heading">Recent print jobs</h2><p id="jobs-count">No jobs recorded yet</p></div><label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="search" type="search" aria-label="Search IP or document" placeholder="Search IP or document"></label></div><div class="table-scroll"><table><thead><tr><th>Document</th><th>Source IP</th><th>Received</th><th>Data</th><th>Status</th></tr></thead><tbody id="jobs-body"></tbody></table></div><div id="jobs-empty" class="empty-state"><div class="empty-icon" aria-hidden="true">↳</div><strong>Your print history starts here</strong><p>Deploy the gateway and send a print job through it.<br>Its source IP and delivery status will appear automatically.</p></div><div class="pagination"><span id="pagination-label">0 jobs</span><div><button class="secondary" id="previous" disabled>← Previous</button><button class="secondary" id="next" disabled>Next →</button></div></div></section>
+        <footer class="content-footer"><span>Refreshes every 15 seconds</span><span>“Forwarded” confirms network delivery, not physical page output.</span></footer>
+      </div>
+    </main>
+  </div>
+  <dialog id="connection-dialog"><form id="connection-form"><div class="dialog-heading"><h2>Connect your gateway</h2><button class="icon-button" id="connection-close" type="button" aria-label="Close connection settings">×</button></div><p class="muted">Enter the HTTPS address of your always-on print gateway.</p><label for="api-url">Gateway API address</label><input id="api-url" type="url" placeholder="https://prints.example.com" required><p class="field-help">For a preview on this computer, use http://127.0.0.1:8765. The address is saved in this browser; your password is not.</p><p id="connection-error" role="alert" class="error" hidden></p><button class="primary" type="submit">Save connection</button></form></dialog>
+  <div id="toast" role="status" class="toast" hidden></div>
+</body>
+</html>
